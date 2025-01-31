@@ -1,6 +1,8 @@
 package config
 
 import (
+	"log"
+
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
@@ -18,7 +20,12 @@ type Mysql struct {
 }
 
 func Load(path string) Config {
-	godotenv.Load(path + "/.env")
+	// .env faylni o'qish
+	err := godotenv.Load(path + "/.env")
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err) // Xatolikni qaytarish
+	}
+
 	conf := viper.New()
 	conf.AutomaticEnv()
 	cfg := Config{

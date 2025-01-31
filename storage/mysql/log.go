@@ -18,13 +18,15 @@ func NewLogStorage(db *sql.DB) repo.LogStorageI {
 	}
 }
 func (t *logRepo) Create(ctx context.Context, req *repo.Log) (*repo.Log, error) {
+	textID := sql.NullInt64{Int64: int64(req.Text_id), Valid: req.Text_id != 0}
+
 	query := `
 		INSERT INTO logs (
 			text_id,
 			button
-		)VALUES (?, ?)
+		)VALUES (?, ?);
 	`
-	_, err := t.db.Exec(query, req.Text_id, req.Button)
+	_, err := t.db.Exec(query, textID, req.Button)
 	if err != nil {
 		return nil, err
 	}
@@ -32,6 +34,5 @@ func (t *logRepo) Create(ctx context.Context, req *repo.Log) (*repo.Log, error) 
 	if req.Time.IsZero() {
 		req.Time = time.Now()
 	}
-
 	return req, nil
 }

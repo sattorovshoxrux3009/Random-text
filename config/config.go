@@ -6,6 +6,7 @@ import (
 )
 
 type Config struct {
+	Port  string
 	Mysql Mysql
 }
 type Mysql struct {
@@ -21,6 +22,7 @@ func Load(path string) Config {
 	conf := viper.New()
 	conf.AutomaticEnv()
 	cfg := Config{
+		Port: conf.GetString("PORT"),
 		Mysql: Mysql{
 			Host:     conf.GetString("MYSQL_HOST"),
 			Port:     conf.GetString("MYSQL_PORT"),
